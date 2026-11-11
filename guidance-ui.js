@@ -82,12 +82,6 @@ function build() {
   html += '<p class="dg-intro">A browser-local engineering standards library and search tool. Upload your authorised copies of standards and they are indexed on this machine only — nothing is ever sent to a server.</p>';
   html += '<p class="dg-note"><strong>Scope and honesty:</strong> this is a curated reference database, not a live search of full standard text. Most ASHRAE, NFPA, ASME and ICC documents are <strong>paywalled</strong> — this tool links to the official source and summarises applicability; it does not reproduce standard text. Editions were checked against publisher sources on 11 November 2026; each reference shows its verification status. A model code is <strong>not</strong> enforceable until adopted by the authority having jurisdiction (AHJ) for the project.</p>';
 
-  /* 1 · Library */
-  html += '<section class="dg-block" aria-label="Engineering standards library"><h3>1 · Engineering standards library</h3>';
-  html += '<p class="dg-note">Your documents live in this browser only (IndexedDB where available). Upload an authorised copy to make a reference Available for review — the search re-runs with it included. Back up the library with Export; restore it with Import. <span id="dg-lib-storage"></span></p>';
-  html += '<div class="dg-row"><button type="button" class="dg-btn" id="dg-lib-export">Export library backup</button><button type="button" class="dg-btn" id="dg-lib-import-btn">Import backup</button><input type="file" id="dg-lib-import-file" accept=".json,application/json" hidden /><span class="dg-count" id="dg-lib-count"></span></div>';
-  html += '<div class="dg-row"><label class="dg-filter">Filter library <input id="dg-lib-filter" type="search" placeholder="Filter by title, organisation, or number…" /></label><label>Category <select id="dg-lib-cat"><option value="">All categories</option>' + D.LIB_CATS.map(function (c) { return '<option value="' + esc(c.id) + '">' + esc(c.label) + '</option>'; }).join("") + '</select></label><label>Status <select id="dg-lib-status"><option value="">All statuses</option><option>Available</option><option>Partial</option><option>Upload required</option><option>Link required</option><option>Unverified</option><option>Superseded</option></select></label></div>';
-  html += '<div id="dg-lib-export-area"></div><div id="dg-library"></div></section>';
 
   /* 2 · Project context: jurisdiction, spaces, equipment */
   html += '<section class="dg-block" aria-label="Project context"><h3>2 · Project context — jurisdiction, space types, equipment</h3>';
@@ -120,6 +114,13 @@ function build() {
   html += '<label class="dg-q">Question or search <input id="dg-query" type="search" placeholder="e.g. What are the ventilation requirements for an operating theatre?" /></label>';
   html += '<button type="button" class="dg-btn dg-go" id="dg-search">Search guidance</button>';
   html += '</div><div class="dg-suggest" id="dg-suggest"></div></section>';
+
+  /* 1 · Library */
+  html += '<section class="dg-block" aria-label="Engineering standards library"><h3>1 · Engineering standards library</h3>';
+  html += '<p class="dg-note">Your documents live in this browser only (IndexedDB where available). Upload an authorised copy to make a reference Available for review — the search re-runs with it included. Back up the library with Export; restore it with Import. <span id="dg-lib-storage"></span></p>';
+  html += '<div class="dg-row"><button type="button" class="dg-btn" id="dg-lib-export">Export library backup</button><button type="button" class="dg-btn" id="dg-lib-import-btn">Import backup</button><input type="file" id="dg-lib-import-file" accept=".json,application/json" hidden /><span class="dg-count" id="dg-lib-count"></span></div>';
+  html += '<div class="dg-row"><label class="dg-filter">Filter library <input id="dg-lib-filter" type="search" placeholder="Filter by title, organisation, or number…" /></label><label>Category <select id="dg-lib-cat"><option value="">All categories</option>' + D.LIB_CATS.map(function (c) { return '<option value="' + esc(c.id) + '">' + esc(c.label) + '</option>'; }).join("") + '</select></label><label>Status <select id="dg-lib-status"><option value="">All statuses</option><option>Available</option><option>Partial</option><option>Upload required</option><option>Link required</option><option>Unverified</option><option>Superseded</option></select></label></div>';
+  html += '<div id="dg-lib-export-area"></div><div id="dg-library"></div></section>';
 
   html += '<div id="dg-clarify" aria-live="polite"></div>';
   html += '<div id="dg-results" aria-live="polite"></div>';

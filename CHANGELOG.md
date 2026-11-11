@@ -2,6 +2,17 @@
 
 All notable changes to the HVAC Repository.
 
+## [3.2.2] — 2026-11-11
+
+### Changed — section order (revision 4)
+
+- Moved "1 · Engineering standards library" to after "3 · Search" in
+  the Design Guidance tab. The page now reads: 2 · Project context,
+  3 · Search, 1 · Engineering standards library, then the report area
+  and 5 · Project checklist. The library keeps its "1 ·" heading and
+  all of its controls and IDs are unchanged, so uploads, filtering,
+  export/import and the persistent checklist work exactly as before.
+
 ## [3.2.1] — 2026-11-11
 
 ### Removed — two description paragraphs, at the user's request
