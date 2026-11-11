@@ -2,6 +2,87 @@
 
 All notable changes to the HVAC Repository.
 
+## [2.2.0] — 2026-11-11
+
+### Fixed — version strings
+
+- The v2.1 bump missed the in-tab version line: the Design Guidance tab
+  still read "Version 2.0" while the footer read "Design Guidance v2.1".
+  Both now read 2.2, and no 2.0/2.1 version strings remain in the UI.
+
+### Added — data-centre depth
+
+- Nine new references (database now 76; 44 VERIFIED, 11 PARTIALLY VERIFIED,
+  21 NOT VERIFIED; 59 PAYWALLED):
+  - ASHRAE 127-2020 (VERIFIED), including Addendum b (approved 27 February
+    2026) which extends the rating method to liquid-cooling equipment and
+    CDUs and defines the Technology Cooling System (TCS) and Facility Water
+    System (FWS).
+  - AHRI 550/590 (I-P) 2026 and AHRI 551/591 (SI) 2026 (both VERIFIED;
+    550/590-2026 announced by AHRI in 2026, 551/591-2026 approved
+    28 January 2026; both supersede the 2023 editions).
+  - CTI ATC-105 and CTI STD-201 (both NOT VERIFIED — secondary sources
+    disagree on the ATC-105 edition, and STD-201 has been restructured into
+    STD-201RS / Dry RS / OM; both flagged to confirm with CTI).
+  - ASHRAE TC 9.9 Thermal Guidelines, 5th edition, revised and expanded
+    (2024) (PARTIALLY VERIFIED — the 2024 revised edition is listed by
+    standards retailers, not confirmed on ASHRAE's own page).
+  - ASHRAE Guideline 12-2020 (VERIFIED), ASHRAE Guideline 1.5-2017
+    (VERIFIED; a revised edition is in development, public review
+    August–September 2026), ISO/IEC 30134 multi-part KPIs (2016–2026)
+    (VERIFIED, from the ISO committee catalogue; Part 2 PUE is the 2026
+    edition, the 2016 edition is withdrawn).
+  - NFPA 75 note updated: the 2024 edition adds requirements for
+    immersion-cooling equipment and off-gas detection, and lithium-ion
+    battery requirements moved to NFPA 855 (summarised from the publisher's
+    edition summary; exact provisions to be confirmed in the published text).
+- Equipment catalogue grows from 69 to 72 items: cooling distribution
+  units (CDUs), direct-to-chip liquid cooling, and immersion cooling, with
+  natural-language aliases and equipment profiles (TCS/FWS split, coolant
+  and water-quality requirements, leak detection, NFPA 75 provisions).
+- Data hall, server room, UPS room, battery room, and generator room
+  profiles deepened: TC 9.9 classes A1–A4 described qualitatively only
+  (A1 narrowest allowable envelope, A4 widest; the recommended envelope is
+  narrower than any allowable envelope — no numeric class ranges are
+  published), TCS/FWS split, Tier redundancy effects (concurrently
+  maintainable design needs N+1 plant, isolation valves, maintenance
+  bypasses; Tier certification is not code compliance), battery-room
+  gas/off-gas detection, generator combustion air and radiator heat
+  rejection, and integrated-systems / failure-mode testing (loss of a
+  chiller, pump or cooling-tower cell; standby start-up; chilled-water
+  temperature recovery; server inlet temperature envelope; alarms to BMS).
+- Commissioning topic now includes ASHRAE Guideline 1.5 and covers
+  integrated systems and failure-mode testing.
+
+### Added — outstanding documents section
+
+- Every search result now lists the references it relies on whose full text
+  is not freely available (PAYWALLED or PUBLIC PARTIAL), each with title,
+  edition, publisher, official source link, why it is needed for this
+  search, what cannot be verified without it, and the action ("upload an
+  authorised copy or provide an accessible link"). The section ends:
+  "Do not mark this review complete until the outstanding documents are
+  provided or the gaps are otherwise closed." It is tied to the query's own
+  references, not the whole database.
+
+### Added — Washington 2024 code note
+
+- The Washington State and Seattle jurisdiction options now note that the
+  State Building Code Council states the 2024 Washington codes are
+  scheduled to take effect 3 May 2027 (final adoption still pending at
+  last check; 2021 editions remain the baseline), and that Seattle is
+  targeting adoption of the 2024 Seattle codes by about May 2027.
+
+### Testing
+
+- Local jsdom test suite (`/tmp/dg-qa/test.js`): 46 checks, all passing —
+  the previous 36 checks plus 10 new v2.2 checks (outstanding-documents
+  section for a paywalled query, WA 2024 note, TC 9.9 classes / TCS/FWS /
+  Tier content, CDU and immersion-cooling equipment, 76-reference table,
+  AHRI 550/590 filter, no outstanding section when a query has no refs,
+  version strings consistent at 2.2). Live browser verification of the
+  deployed site is recorded in the delivery message for this release.
+
 ## [2.1.0] — 2026-11-11
 
 ### Added — clause-level references

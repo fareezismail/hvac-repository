@@ -1,4 +1,4 @@
-/* Design Guidance v2 — client-side applicability engine and UI.
+/* Design Guidance v2.2 — client-side applicability engine and UI.
    Runs entirely in the browser. No backend, no API keys, no live web search.
    The Design Guidance tab is therefore a curated, traceable reference tool:
    every answer cites entries in guidance-data.js with their access and
@@ -303,6 +303,20 @@ function runSearch() {
   html += '<h3>Applicable references (' + refs.length + ')</h3>';
   html += '<p class="dg-note">Classification: <strong>Statutory / mandatory</strong> and <strong>adopted code</strong> items are only enforceable where adopted for this jurisdiction — ' + (jur && jur.id === "us-model" ? 'no adopted jurisdiction is selected, so adoption is <strong>unconfirmed</strong>.' : 'verify adoption for ' + esc(jur.label) + '.') + '</p>';
   html += '<div class="dg-ref-list">' + refs.map(function (r) { return refCard(r, equip, spaces); }).join("") + '</div>';
+
+  /* Outstanding documents: references this search relies on whose full text
+     is not freely available here. The review is incomplete until they are
+     provided or the gaps are otherwise closed. */
+  var outstanding = refs.filter(function (item) { return item.r.access === "PAYWALLED" || item.r.access === "PUBLIC PARTIAL"; });
+  if (outstanding.length) {
+    html += '<h3>Outstanding documents — this review is incomplete</h3>';
+    html += '<p>The following references apply to this search, but their full text is not freely available in this tool, so the findings that depend on them are not fully verified.</p><ul>';
+    html += outstanding.map(function (item) {
+      var r = item.r;
+      return '<li><strong>' + esc(r.num) + ' — ' + esc(r.title) + '</strong> (' + esc(r.edition) + ' edition, ' + esc(r.org) + ') — needed for: ' + esc(item.appliesTo.join("; ")) + '. Cannot be verified without it: full clause text for ' + esc(r.clauses) + ' <a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">Official source ↗</a> — action: upload an authorised copy or provide an accessible link.</li>';
+    }).join("");
+    html += '</ul><p><strong>Do not mark this review complete until the outstanding documents are provided or the gaps are otherwise closed.</strong></p>';
+  }
 
   /* E/F/G. Checklist, coordination, missing info */
   var checklist = [], coord = [], miss = [];
