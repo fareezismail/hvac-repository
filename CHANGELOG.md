@@ -2,6 +2,24 @@
 
 All notable changes to the HVAC Repository.
 
+## [3.2.1] — 2026-11-11
+
+### Removed — two description paragraphs, at the user's request
+
+- Design Guidance tab: removed the description after the version line
+  ("A curated, client-side reference platform: select space types,
+  equipment, and jurisdiction, then search. No backend and no live web
+  search — answers cite the reference database below, with each
+  reference's access and verification status shown."). The tab now shows
+  only "Version 3.2.1 · 11 November 2026."
+- Design Guidance intro (`dg-intro` in `guidance-ui.js`): removed the
+  last two sentences ("Select space types, pick an equipment or system,
+  choose a jurisdiction, and ask a question — the answer is a numbered
+  engineering report. With no space types selected, answers are
+  equipment-specific only and never assume a building type."). The intro
+  now ends after the sentence about uploads being indexed on this
+  machine only.
+
 ## [3.2.0] — 2026-11-11
 
 ### Added — 66 more direct Google Drive file links in the notes search

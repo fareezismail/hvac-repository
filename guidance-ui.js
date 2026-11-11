@@ -79,7 +79,7 @@ function build() {
   var mount = $("dg-app");
   if (!mount) return;
   var html = "";
-  html += '<p class="dg-intro">A browser-local engineering standards library and search tool. Upload your authorised copies of standards and they are indexed on this machine only — nothing is ever sent to a server. Select space types, pick an equipment or system, choose a jurisdiction, and ask a question — the answer is a numbered engineering report. <strong>With no space types selected, answers are equipment-specific only</strong> and never assume a building type.</p>';
+  html += '<p class="dg-intro">A browser-local engineering standards library and search tool. Upload your authorised copies of standards and they are indexed on this machine only — nothing is ever sent to a server.</p>';
   html += '<p class="dg-note"><strong>Scope and honesty:</strong> this is a curated reference database, not a live search of full standard text. Most ASHRAE, NFPA, ASME and ICC documents are <strong>paywalled</strong> — this tool links to the official source and summarises applicability; it does not reproduce standard text. Editions were checked against publisher sources on 11 November 2026; each reference shows its verification status. A model code is <strong>not</strong> enforceable until adopted by the authority having jurisdiction (AHJ) for the project.</p>';
 
   /* 1 · Library */
