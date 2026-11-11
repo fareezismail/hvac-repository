@@ -2,6 +2,31 @@
 
 All notable changes to the HVAC Repository.
 
+## [3.1.0] — 2026-11-11
+
+### Added — direct Google Drive file links in the notes search
+
+- "Open in Drive" now opens the file itself for 328 of the 1,161 indexed
+  entries. Their `webViewLink` values were resolved against the HVAC folder
+  in Google Drive by exact filename, with folder-path disambiguation where
+  the same name exists in more than one folder, and are stored in
+  `DRIVE_LINKS` in `index.html`. A sample of resolved links was verified by
+  re-fetching them via the Drive API (IDs, names, and links all matched).
+  Unresolved entries keep the Drive-search fallback and folder entries keep
+  the folder link. No Drive URLs are invented.
+- 60 entries were left unresolved because the same file name exists in more
+  than one folder and the index path did not disambiguate them; 83 were not
+  found in Drive under the indexed name. 71 of those 83 differ from a Drive
+  file name only in spaces or underscores, which suggests the index recorded
+  the name slightly differently — a follow-up could recover them with a
+  normalised (separator-insensitive) match.
+
+### Removed
+
+- The description paragraph from the notes tab. The "Open the HVAC folder
+  in Google Drive" link remains, as does the search itself (unchanged
+  scoring, ranking, filters, and suggested queries).
+
 ## [3.0.0] — 2026-11-11
 
 Restructure around the workflow: library → space types / equipment /

@@ -1,14 +1,15 @@
 # HVAC Repository
 
-Search across Fareez's indexed engineering-notes repository — the "HVAC" folder
-in Google Drive — covering design guides and codes, project calculations,
-equipment and vendor catalogs, and the folder structure itself. Results point
-back to the index entry and folder path so the source document can be opened
-in Drive.
+The **Search my notes** tab searches Fareez's indexed engineering-notes
+repository — the "HVAC" folder in Google Drive — covering design guides and
+codes, project calculations, equipment and vendor catalogs, and the folder
+structure itself. Results show the index entry and folder path; "Open in
+Drive" opens the file directly where it was resolved against Drive, and
+otherwise runs a Drive search for the file name.
 
 Live site: https://fareezismail.github.io/hvac-repository/
 
-## Design Guidance (v3.0)
+## Design Guidance (v3.1)
 
 The **Design guidance** tab is a space-type-based HVAC design codes and
 guidance platform. It is fully client-side: there is no backend, no API key,
