@@ -115,15 +115,15 @@ function build() {
   html += '<button type="button" class="dg-btn dg-go" id="dg-search">Search guidance</button>';
   html += '</div><div class="dg-suggest" id="dg-suggest"></div></section>';
 
+  html += '<div id="dg-clarify" aria-live="polite"></div>';
+  html += '<div id="dg-results" aria-live="polite"></div>';
+
   /* 1 · Library */
   html += '<section class="dg-block" aria-label="Engineering standards library"><h3>1 · Engineering standards library</h3>';
   html += '<p class="dg-note">Your documents live in this browser only (IndexedDB where available). Upload an authorised copy to make a reference Available for review — the search re-runs with it included. Back up the library with Export; restore it with Import. <span id="dg-lib-storage"></span></p>';
   html += '<div class="dg-row"><button type="button" class="dg-btn" id="dg-lib-export">Export library backup</button><button type="button" class="dg-btn" id="dg-lib-import-btn">Import backup</button><input type="file" id="dg-lib-import-file" accept=".json,application/json" hidden /><span class="dg-count" id="dg-lib-count"></span></div>';
   html += '<div class="dg-row"><label class="dg-filter">Filter library <input id="dg-lib-filter" type="search" placeholder="Filter by title, organisation, or number…" /></label><label>Category <select id="dg-lib-cat"><option value="">All categories</option>' + D.LIB_CATS.map(function (c) { return '<option value="' + esc(c.id) + '">' + esc(c.label) + '</option>'; }).join("") + '</select></label><label>Status <select id="dg-lib-status"><option value="">All statuses</option><option>Available</option><option>Partial</option><option>Upload required</option><option>Link required</option><option>Unverified</option><option>Superseded</option></select></label></div>';
   html += '<div id="dg-lib-export-area"></div><div id="dg-library"></div></section>';
-
-  html += '<div id="dg-clarify" aria-live="polite"></div>';
-  html += '<div id="dg-results" aria-live="polite"></div>';
 
   /* 5 · Project checklist (persistent, local only) */
   html += '<section class="dg-block" aria-label="Project checklist"><h3>5 · Project checklist</h3>';

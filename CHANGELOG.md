@@ -2,6 +2,18 @@
 
 All notable changes to the HVAC Repository.
 
+## [3.2.3] — 2026-11-11
+
+### Changed — section order, corrected (revision 4, clarified)
+
+- Moved "1 · Engineering standards library" to just before
+  "5 · Project checklist", as clarified by the user (v3.2.2 had put it
+  immediately after "3 · Search", which was not what was meant). The
+  page now reads: 2 · Project context, 3 · Search, report area,
+  1 · Engineering standards library, 5 · Project checklist. The
+  library keeps its "1 ·" heading and all of its controls and IDs are
+  unchanged.
+
 ## [3.2.2] — 2026-11-11
 
 ### Changed — section order (revision 4)
