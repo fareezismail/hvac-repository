@@ -265,6 +265,62 @@
     .tabs{flex-wrap:wrap}
     .tab{flex:1 1 9rem;text-align:left}
   }
+
+  /* ---------- Design Guidance v2 ---------- */
+  .dg-intro{max-width:56rem}
+  .dg-note{background:#f4f6f3;border:1px solid #d8ddd5;border-left:4px solid #2e7d5f;padding:.7rem .9rem;border-radius:6px;max-width:56rem}
+  .dg-block{margin:1.2rem 0;padding:1rem;border:1px solid #d8ddd5;border-radius:8px;background:#fff}
+  .dg-block h3{margin:.1rem 0 .7rem;font-size:1.1rem}
+  .dg-sub{font-weight:400;color:var(--ink-2,#555)}
+  .dg-row{display:flex;flex-wrap:wrap;gap:.8rem;align-items:flex-end}
+  .dg-row label{font-size:.9rem;font-weight:600;display:flex;flex-direction:column;gap:.25rem}
+  .dg-row select,.dg-row input{font:inherit;font-weight:400;padding:.45rem .5rem;border:1px solid #b9c0b5;border-radius:6px;min-width:14rem}
+  .dg-q{flex:1;min-width:18rem}
+  .dg-q input{width:100%}
+  .dg-btn{font:inherit;padding:.5rem .9rem;border:1px solid #2e7d5f;background:#fff;color:#1d5c46;border-radius:6px;cursor:pointer}
+  .dg-btn:hover{background:#eef6f1}
+  .dg-go{background:#1d5c46;color:#fff}
+  .dg-go:hover{background:#174a38}
+  .dg-count{font-size:.9rem;color:var(--ink-2,#555);align-self:center}
+  .dg-juris-note{font-size:.92rem;color:var(--ink-2,#555);max-width:56rem}
+  .dg-groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(19rem,1fr));gap:.8rem}
+  .dg-group{border:1px solid #d8ddd5;border-radius:8px;padding:.6rem .8rem;margin:0}
+  .dg-group legend{font-weight:700;padding:0 .3rem}
+  .dg-group-actions{display:flex;gap:.6rem;margin:.2rem 0 .5rem}
+  .dg-group-actions button,.dg-suggest button{font:inherit;font-size:.85rem;background:none;border:none;color:#1d5c46;cursor:pointer;text-decoration:underline;padding:0}
+  .dg-checks{display:grid;grid-template-columns:1fr 1fr;gap:.25rem .6rem}
+  .dg-check{font-size:.92rem;font-weight:400;display:flex;gap:.35rem;align-items:flex-start}
+  .dg-filter input{padding:.4rem .5rem;border:1px solid #b9c0b5;border-radius:6px;font:inherit}
+  .dg-other-label{font-size:.92rem;display:block;margin-top:.5rem}
+  .dg-other-label input{width:100%;padding:.45rem .5rem;border:1px solid #b9c0b5;border-radius:6px;font:inherit;margin-top:.25rem}
+  .dg-suggest{margin-top:.7rem;font-size:.92rem;display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+  .dg-result{margin:1.2rem 0;padding:1rem;border:1px solid #2e7d5f;border-radius:8px;background:#fbfdfb}
+  .dg-result h3{margin:1rem 0 .4rem}
+  .dg-result h4{margin:.8rem 0 .3rem}
+  .dg-interp{display:grid;grid-template-columns:11rem 1fr;gap:.3rem .8rem;margin:.4rem 0}
+  .dg-interp dt{font-weight:700}
+  .dg-interp dd{margin:0}
+  .dg-conflict{background:#fdf3e7;border:1px solid #d9a441;border-left:4px solid #d9a441;padding:.7rem .9rem;border-radius:6px;margin:.8rem 0}
+  .dg-clarify{background:#eef4fb;border:1px solid #7aa7c7;border-left:4px solid #2f6f92;padding:.7rem .9rem;border-radius:6px;margin:.8rem 0}
+  .dg-ref-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(20rem,1fr));gap:.8rem;margin:.6rem 0}
+  .dg-ref{border:1px solid #d8ddd5;border-radius:8px;padding:.7rem .9rem;background:#fff}
+  .dg-ref header{margin-bottom:.3rem}
+  .dg-ref-meta{font-size:.88rem;color:var(--ink-2,#555)}
+  .dg-ref-note{font-size:.88rem;color:var(--ink-2,#555)}
+  .dg-badge{display:inline-block;font-size:.78rem;font-weight:600;border:1px solid #b9c0b5;border-radius:999px;padding:.05rem .5rem;margin:.1rem .15rem 0 0}
+  .dg-badge-pay{border-color:#b3541e;color:#8a3c12}
+  .dg-badge-pub{border-color:#2e7d5f;color:#1d5c46}
+  .dg-checklist{list-style:none;padding:0}
+  .dg-checklist li{margin:.25rem 0}
+  .dg-topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:.6rem}
+  .dg-topic{font:inherit;text-align:left;border:1px solid #d8ddd5;border-radius:8px;background:#fff;padding:.6rem .8rem;cursor:pointer}
+  .dg-topic:hover{border-color:#2e7d5f}
+  .dg-topic span{display:block;font-size:.88rem;color:var(--ink-2,#555);margin-top:.2rem}
+  .dg-ref-table-wrap{overflow-x:auto}
+  .dg-ref-table{width:100%;border-collapse:collapse;font-size:.9rem}
+  .dg-ref-table th,.dg-ref-table td{border-bottom:1px solid #e3e6e1;padding:.45rem .5rem;text-align:left;vertical-align:top}
+  @media (max-width:640px){.dg-checks{grid-template-columns:1fr}.dg-interp{grid-template-columns:1fr}.dg-interp dt{margin-top:.4rem}}
+
 </style>
 </head>
 <body>
@@ -338,40 +394,17 @@
 
   <!-- ============ ONLINE GUIDANCE ============ -->
   <section class="panel guide hidden" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide">
-    <h2>Design guidance (online sources)</h2>
-    <p>This mode is intended to search <strong>live public sources</strong> alongside the notes: manufacturer and industry <strong>white papers</strong>, <strong>ASHRAE public guidance</strong> (technical committee pages, public summaries, and open articles), and <strong>Washington State codes</strong> &mdash; including the Washington State Energy Code and mechanical code provisions in WAC Title 51, and <strong>Seattle codes</strong> and amendments &mdash; returning answers with citations and links out to each source.</p>
-
-    <div class="status" role="note">
-      <strong>Status: not yet wired to a live search</strong>
-      <p>Live web search cannot run from this static page alone. It needs a <strong>search API key</strong> and a <strong>small backend</strong> to hold that key and run the retrieval before this mode can search live. Until that is connected, use the curated source links below &mdash; they go straight to the primary references.</p>
-    </div>
-
-    <div class="link-list">
-      <div class="link-card">
-        <h3>ASHRAE TC 9.9 &mdash; Mission Critical Facilities, Data Centers</h3>
-        <p>ASHRAE Technical Committee 9.9 covers mission-critical facilities, data centers, technology spaces, and electronic equipment &mdash; the committee behind the Datacom Series and the thermal guidelines for data processing environments, including liquid-cooling guidance.</p>
-        <a class="ext" href="https://www.ashrae.org/technical-resources/technical-committees/tc-9-9-mission-critical-facilities-data-centers-technology-spaces-and-electronic-equipment" target="_blank" rel="noopener noreferrer">Open the ASHRAE TC 9.9 page <span aria-hidden="true">&#8599;</span></a>
-      </div>
-
-      <div class="link-card">
-        <h3>Washington State Building Code &mdash; WAC Title 51</h3>
-        <p>Washington Administrative Code Title 51 holds the state building code rules adopted by the State Building Code Council, including <strong>WAC 51-11</strong> (Washington State Energy Code) and <strong>WAC 51-52</strong> (mechanical code provisions). Washington codes are public law and can be read and quoted directly.</p>
-        <a class="ext" href="https://lawfilesext.leg.wa.gov/law/wac/2021/Title51" target="_blank" rel="noopener noreferrer">Open WAC Title 51 <span aria-hidden="true">&#8599;</span></a>
-      </div>
-
-      <div class="link-card">
-        <h3>Seattle codes and amendments</h3>
-        <p>Seattle adopts its own building, mechanical, and energy codes with local amendments on top of the state code. Seattle code topics are part of the planned live search coverage; until the live search is connected, check the current Seattle amendments alongside WAC Title 51 above when a project is inside city limits.</p>
-      </div>
-    </div>
-
+    <h2>Design guidance — space-type-based HVAC codes &amp; standards</h2>
+    <p>Version 2.0 · 11 November 2026. A curated, client-side reference platform: select space types, equipment, and jurisdiction, then search. No backend and no live web search — answers cite the reference database below, with each reference's access and verification status shown.</p>
+    <div id="dg-app"></div>
     <div class="note-box">
-      <strong>A note on ASHRAE standards:</strong> ASHRAE standards and guidelines themselves (62.1, 90.1, 90.4, and others) are paywalled and copyrighted. This search covers ASHRAE&rsquo;s public pages, summaries, and guidance and links out to the standard &mdash; it does not index full standard text.
+      <strong>A note on ASHRAE standards:</strong> ASHRAE standards and guidelines themselves (62.1, 90.1, 90.4, 170, and others) are paywalled and copyrighted. This tool links to the official source and summarises applicability — it does not index or reproduce full standard text.
     </div>
   </section>
 
   <footer class="site">
     <span>Prototype &middot; Nov 11, 2026</span>
+    <span>Design Guidance v2.0 &middot; 11 November 2026</span>
     <span>Searches the engineering-notes index as it stood on that date.</span>
     <span>The index will be refreshed as the remaining indexing passes are completed.</span>
   </footer>
@@ -811,5 +844,7 @@ var SEARCH_DATA = [{"s":"guides","p":"Design Guides and Codes — Content Index 
   runSearch(false);
 })();
 </script>
+<script src="guidance-data.js"></script>
+<script src="guidance-ui.js"></script>
 </body>
 </html>
