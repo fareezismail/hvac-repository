@@ -75,7 +75,7 @@ function build() {
 
   /* Topic library + reference database */
   html += '<section class="dg-block" aria-label="Topic library"><h3>HVAC design topic library</h3><div class="dg-topics" id="dg-topics"></div><div id="dg-topic-detail"></div></section>';
-  html += '<section class="dg-block" aria-label="Reference database"><h3>Reference database</h3><div class="dg-row"><label>Filter references <input id="dg-ref-filter" type="search" placeholder="Filter by title, organisation, or number…" /></label><label>Access <select id="dg-ref-access"><option value="">All access</option><option>PUBLIC</option><option>PUBLIC PARTIAL</option><option>PAYWALLED</option><option>NOT VERIFIED</option></select></label><label>Verification <select id="dg-ref-ver"><option value="">All statuses</option><option>VERIFIED</option><option>PARTIALLY VERIFIED</option><option>NOT VERIFIED</option><option>SUPERSEDED</option></select></label></div><p class="dg-count" id="dg-ref-count"></p><div class="dg-ref-table-wrap"><table class="dg-ref-table" id="dg-ref-table"><thead><tr><th>Reference</th><th>Edition</th><th>Access</th><th>Verification</th><th>Classification</th><th>Official source</th></tr></thead><tbody></tbody></table></div><p class="dg-note">Paywalled references require an authorised copy or a user-provided document — this tool never bypasses paywalls. To add or update a reference, edit <code>guidance-data.js</code> (see README).</p></section>';
+  html += '<section class="dg-block" aria-label="Reference database"><h3>Reference database</h3><div class="dg-row"><label>Filter references <input id="dg-ref-filter" type="search" placeholder="Filter by title, organisation, or number…" /></label><label>Access <select id="dg-ref-access"><option value="">All access</option><option>PUBLIC</option><option>PUBLIC PARTIAL</option><option>PAYWALLED</option><option>NOT VERIFIED</option></select></label><label>Verification <select id="dg-ref-ver"><option value="">All statuses</option><option>VERIFIED</option><option>PARTIALLY VERIFIED</option><option>NOT VERIFIED</option><option>SUPERSEDED</option></select></label></div><p class="dg-count" id="dg-ref-count"></p><div class="dg-ref-table-wrap"><table class="dg-ref-table" id="dg-ref-table"><thead><tr><th>Reference</th><th>Edition</th><th>Clauses</th><th>Access</th><th>Verification</th><th>Classification</th><th>Official source</th></tr></thead><tbody></tbody></table></div><p class="dg-note">Paywalled references require an authorised copy or a user-provided document — this tool never bypasses paywalls. To add or update a reference, edit <code>guidance-data.js</code> (see README).</p></section>';
 
   mount.innerHTML = html;
   wire();
@@ -158,6 +158,15 @@ function wire() {
     var b = ev.target.closest ? ev.target.closest("button[data-topic]") : null;
     if (b) renderTopicDetail(b.getAttribute("data-topic"));
   });
+  $("dg-topic-detail").addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("#dg-topic-search") : null;
+    if (!b) return;
+    var t = null;
+    D.TOPICS.forEach(function (x) { if (x.id === state.topic) t = x; });
+    if (!t) return;
+    $("dg-query").value = t.label;
+    runSearch();
+  });
 }
 
 function applySuggestion(s) {
@@ -199,7 +208,12 @@ function interpret(query) {
   });
   var topics = [];
   ["ventilation", "filtration", "pressure", "temperature", "humidity", "exhaust", "refrigerant", "commissioning", "smoke", "energy", "redundancy", "fire"].forEach(function (t) { if (q.indexOf(t) !== -1) topics.push(t); });
-  return { equip: equip, equipFromQuery: equipFromQuery, spacesMentioned: spacesMentioned, topics: topics };
+  /* Clause/section references in the question, e.g. "IMC 1107" or "1109.2.7". */
+  var section = "";
+  var dotted = q.match(/\b\d{3,4}(?:\.\d+)+\b/);
+  if (dotted) section = dotted[0];
+  else { var sm = q.match(/(?:section|clause|imc|ashrae|nfpa|ibc|ifc)\s+(\d{3,4})\b/); if (sm) section = sm[1]; }
+  return { equip: equip, equipFromQuery: equipFromQuery, spacesMentioned: spacesMentioned, topics: topics, section: section };
 }
 
 function selectedSpaceIds() { return Object.keys(state.spaces).filter(function (k) { return state.spaces[k]; }); }
@@ -222,6 +236,7 @@ function runSearch() {
   var html = '<div class="dg-result">';
   /* A. Search interpretation */
   html += '<h3>Search interpretation</h3><dl class="dg-interp">';
+  html += '<dt>Question</dt><dd>' + (state.query ? esc(state.query) : '(none — equipment / space selection only)') + '</dd>';
   html += '<dt>Equipment / system</dt><dd>' + (equip ? esc(D.EQUIP_LABEL[equip] || equip) + (inter.equipFromQuery ? ' (identified from your question)' : ' (selected)') : 'None identified — results are general') + '</dd>';
   html += '<dt>Space types</dt><dd>' + (spaces.length ? spaces.map(function (s) { return esc(D.SPACE_LABEL[s] || s); }).join("; ") + (state.spaces["other-space"] && state.otherSpace ? ' — other: ' + esc(state.otherSpace) : '') : 'None selected — <strong>equipment-specific mode</strong>') + '</dd>';
   html += '<dt>Jurisdiction</dt><dd>' + esc(jur ? jur.label : state.jurisdiction) + (state.ahj ? ' · AHJ: ' + esc(state.ahj) : '') + (state.editions ? ' · Adopted editions: ' + esc(state.editions) : ' · Adopted editions not stated') + '</dd>';
@@ -267,6 +282,24 @@ function runSearch() {
 
   /* B. Applicable references */
   var refs = applicableRefs(equip, spaces, inter);
+  /* Clause-level match: if the question names a section, show it first. */
+  if (inter.section) {
+    var clauseHits = [];
+    D.REFERENCES.forEach(function (r) {
+      (r.clauseList || []).forEach(function (c) {
+        if (c.s === inter.section || c.s.indexOf(inter.section + ".") === 0 || inter.section.indexOf(c.s + ".") === 0) {
+          clauseHits.push({ r: r, c: c });
+        }
+      });
+    });
+    if (clauseHits.length) {
+      html += '<h3>Clause match — ' + esc(inter.section) + '</h3><ul>' + clauseHits.map(function (h) {
+        return '<li><strong>' + esc(h.r.num) + ' §' + esc(h.c.s) + ' — ' + esc(h.c.t) + ':</strong> ' + esc(h.c.about) + ' (' + esc(h.c.kind) + '; ' + esc(h.r.edition) + ' edition — <a href="' + esc(h.r.url) + '" target="_blank" rel="noopener noreferrer">official source ↗</a>)</li>';
+      }).join("") + '</ul>';
+    } else {
+      html += '<p class="dg-note">No indexed clause matches section ' + esc(inter.section) + ' yet — the references below are the closest match. Clause-level sections are added as they are verified against the publisher.</p>';
+    }
+  }
   html += '<h3>Applicable references (' + refs.length + ')</h3>';
   html += '<p class="dg-note">Classification: <strong>Statutory / mandatory</strong> and <strong>adopted code</strong> items are only enforceable where adopted for this jurisdiction — ' + (jur && jur.id === "us-model" ? 'no adopted jurisdiction is selected, so adoption is <strong>unconfirmed</strong>.' : 'verify adoption for ' + esc(jur.label) + '.') + '</p>';
   html += '<div class="dg-ref-list">' + refs.map(function (r) { return refCard(r, equip, spaces); }).join("") + '</div>';
@@ -319,15 +352,23 @@ function applicableRefs(equip, spaces, inter) {
 
 function refCard(item, equip, spaces) {
   var r = item.r;
-  return '<article class="dg-ref"><header><strong>' + esc(r.num) + ' — ' + esc(r.title) + '</strong> <span class="dg-badge">' + esc(r.org) + '</span></header>'
+  var html = '<article class="dg-ref"><header><strong>' + esc(r.num) + ' — ' + esc(r.title) + '</strong> <span class="dg-badge">' + esc(r.org) + '</span></header>'
     + '<p class="dg-ref-meta">Edition ' + esc(r.edition) + ' · ' + esc(r.type) + ' · ' + esc(r.cls) + '</p>'
     + '<p>' + esc(r.clauses) + '</p>'
     + '<p class="dg-ref-meta">Applies to: ' + esc(item.appliesTo.join(" · ")) + '</p>'
     + '<p><a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">Official source ↗</a> '
     + '<span class="dg-badge ' + (r.access === "PAYWALLED" ? "dg-badge-pay" : "dg-badge-pub") + '">' + esc(r.access) + '</span> '
     + '<span class="dg-badge">' + esc(r.verification) + '</span></p>'
-    + (r.notes ? '<p class="dg-ref-note">' + esc(r.notes) + '</p>' : '')
-    + '</article>';
+    + (r.notes ? '<p class="dg-ref-note">' + esc(r.notes) + '</p>' : '');
+  if (r.clauseList && r.clauseList.length) {
+    html += '<details class="dg-clauses"><summary>Clause-level sections (' + r.clauseList.length + ') — section, subject, what it covers</summary>'
+      + '<table class="dg-clause-table"><thead><tr><th>Section</th><th>Subject</th><th>What it covers</th><th>Type</th></tr></thead><tbody>'
+      + r.clauseList.map(function (c) { return '<tr><td><strong>' + esc(c.s) + '</strong></td><td>' + esc(c.t) + '</td><td>' + esc(c.about) + '</td><td>' + esc(c.kind) + '</td></tr>'; }).join("")
+      + '</tbody></table><p class="dg-ref-note">Section titles are from the published table of contents; descriptions are paraphrased summaries, not quoted text. Check the exact wording in the current adopted edition before relying on a clause.</p></details>';
+  } else {
+    html += '<p class="dg-ref-note">Clause-level sections for this reference are not yet indexed — the summary above is the current level of detail. Section structures are added as they are verified against the publisher.</p>';
+  }
+  return html + '</article>';
 }
 
 /* ---------- Topic library (§9) ---------- */
@@ -335,7 +376,7 @@ function renderTopics() {
   var el = $("dg-topics");
   if (!el) return;
   el.innerHTML = D.TOPICS.map(function (t) {
-    return '<button type="button" class="dg-topic" data-topic="' + esc(t.id) + '"><strong>' + esc(t.label) + '</strong><span>' + esc(t.desc) + '</span></button>';
+    return '<button type="button" class="dg-topic" data-topic="' + esc(t.id) + '"><strong>' + esc(t.label) + '</strong><span>' + esc(t.desc) + '</span><span class="dg-topic-cta">View references &rarr;</span></button>';
   }).join("");
 }
 function renderTopicDetail(topicId) {
@@ -343,8 +384,10 @@ function renderTopicDetail(topicId) {
   D.TOPICS.forEach(function (x) { if (x.id === topicId) t = x; });
   var el = $("dg-topic-detail");
   if (!t || !el) return;
+  state.topic = topicId;
   var refs = t.refs.map(refById).filter(Boolean);
-  el.innerHTML = '<div class="dg-result"><h3>' + esc(t.label) + '</h3><p>' + esc(t.desc) + '</p><p>Filter this topic by the space types and equipment selected above, then use Search guidance for a tailored answer.</p><div class="dg-ref-list">' + refs.map(function (r) { return refCard({ r: r, score: 0, appliesTo: ["Topic: " + t.label] }, "", []); }).join("") + '</div></div>';
+  el.innerHTML = '<div class="dg-result dg-topic-detail"><h3>' + esc(t.label) + '</h3><p>' + esc(t.desc) + '</p><p><button type="button" class="dg-btn dg-go" id="dg-topic-search">Search guidance on this topic</button> <span class="dg-note-inline">Runs a tailored search using the space types and equipment you have selected above.</span></p><div class="dg-ref-list">' + refs.map(function (r) { return refCard({ r: r, score: 0, appliesTo: ["Topic: " + t.label] }, "", []); }).join("") + '</div></div>';
+  if (el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 /* ---------- Reference database manager (§10) ---------- */
@@ -361,8 +404,8 @@ function renderRefs() {
     return true;
   });
   tbody.innerHTML = rows.map(function (r) {
-    return '<tr><td><strong>' + esc(r.num) + '</strong><br/>' + esc(r.title) + '</td><td>' + esc(r.edition) + '</td><td>' + esc(r.access) + '</td><td>' + esc(r.verification) + '</td><td>' + esc(r.cls) + '</td><td><a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">Official source ↗</a></td></tr>';
-  }).join("") || '<tr><td colspan="6">No references match the current filters.</td></tr>';
+    return '<tr><td><strong>' + esc(r.num) + '</strong><br/>' + esc(r.title) + '</td><td>' + esc(r.edition) + '</td><td>' + ((r.clauseList && r.clauseList.length) ? r.clauseList.length + ' sections' : '—') + '</td><td>' + esc(r.access) + '</td><td>' + esc(r.verification) + '</td><td>' + esc(r.cls) + '</td><td><a href="' + esc(r.url) + '" target="_blank" rel="noopener noreferrer">Official source ↗</a></td></tr>';
+  }).join("") || '<tr><td colspan="7">No references match the current filters.</td></tr>';
   var c = $("dg-ref-count");
   if (c) {
     var pay = D.REFERENCES.filter(function (r) { return r.access === "PAYWALLED"; }).length;

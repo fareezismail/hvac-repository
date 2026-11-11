@@ -2,6 +2,63 @@
 
 All notable changes to the HVAC Repository.
 
+## [2.1.0] — 2026-11-11
+
+### Added — clause-level references
+
+- Clause-level section tables for 13 references (192 section entries):
+  IMC (54 sections across Chapters 4, 5, 6, 11 and 12, including Chapter 11
+  sections 1101.1–1110 plus 1109.2.7 and 1111), ASHRAE 15 (10), ASHRAE 62.1
+  (13, including VRP subsections 6.2–6.5.6.1), ASHRAE 170 (8), ASHRAE 90.1
+  (17, including §6.1–6.9), ASHRAE 90.4 (11), NFPA 90A (10), NFPA 92 (9),
+  NFPA 101 (25 chapters), ASME B31.5 (12), ANSI/ASSP Z9.5 (7),
+  ISO 14644-1 (10), IBC (6 chapters). Each entry gives section, subject,
+  what it covers, and whether it is mandatory or advisory. Section titles
+  are from the published tables of contents; descriptions are paraphrased
+  summaries, not quoted text.
+- Section-number search: questions such as "IMC 1107" or "1109.2.7" now
+  surface the matching clause first, with its reference, edition, and
+  official source link.
+- Results show the question itself in the search-interpretation box.
+- Reference manager gains a Clauses column (sections indexed per reference).
+- References without verified clause structures still show an honest
+  "not yet indexed" note instead of a guessed list.
+
+### Fixed — topic library
+
+- The topic cards were technically clickable, but the detail appeared below
+  the 25-card grid with no scroll or highlight, so it looked like nothing
+  happened. Topics now show a "View references →" affordance; clicking one
+  scrolls the detail into view with a highlighted border; and the detail has
+  a "Search guidance on this topic" button that runs a tailored search using
+  the space types and equipment currently selected. The intended purpose of
+  the library is as a subject-based entry point: pick a topic, see its
+  linked references with official source links, then run a tailored search
+  — not a set of standalone articles.
+
+### Corrected
+
+- IBC Chapter 28 ("Mechanical Systems") does exist (§2801.1 links
+  mechanical systems to the IMC and IFGC); the earlier note suggesting
+  otherwise was wrong.
+- ASHRAE 170 section titles: the 2021 structure is §7 Inpatient Spaces,
+  §8 Outpatient Facilities, §10 Construction and System Start-Up. Whether
+  the 2025 edition restructured these sections is unverified, so the tool
+  uses the 2021 structure and flags the uncertainty on the reference.
+- ANSI/ASSP Z9.5-2022 §§6–10 numbering is ambiguous across sources and is
+  not published; §§1–5 and the appendices are indexed.
+- NFPA 90A:2027 and NFPA 101:2027 supersession reports (retailer listings)
+  are unverified and are flagged, not relied on.
+- ASME B31.5 clause structure fully verified from the official ASME
+  preview table of contents; the 2025-edition report remains unresolved.
+
+### Testing
+
+- Local jsdom test suite (`/tmp/dg-qa/test.js`): 36 checks, all passing —
+  the previous 34 checks plus topic click via the card's inner text and the
+  topic "Search guidance" button. Live browser verification of the deployed
+  site is recorded in the delivery message for this release.
+
 ## [2.0.0] — 2026-11-11
 
 ### Added — Design Guidance platform (replaces the previous static "online sources" panel)

@@ -37,7 +37,20 @@ database in `guidance-data.js` by the applicability engine in
   entry carries its edition, official source URL, access status, and
   verification status. Editions were checked against publisher sources on
   11 November 2026; see CHANGELOG.md for the verified / unverified lists.
-- **Topic library:** 25 browsable HVAC design topics linked to references.
+- **Clause-level references:** 192 section entries across 13 references
+  (IMC, ASHRAE 15/62.1/170/90.1/90.4, NFPA 90A/92/101, ASME B31.5,
+  ANSI/ASSP Z9.5, ISO 14644-1, IBC), each with section, subject, what it
+  covers, and mandatory/advisory classification. Section-number questions
+  ("IMC 1107", "1109.2.7") surface the matching clause first. Section
+  titles come from published tables of contents; descriptions are
+  paraphrased, never quoted text. References without verified clause
+  structures say so instead of showing a guessed list.
+- **Topic library:** 25 browsable HVAC design topics. Each topic card is
+  clickable ("View references →"): it shows the topic's linked references
+  with official source links and a "Search guidance on this topic" button
+  that runs a tailored search using the space types and equipment currently
+  selected. The library is a subject-based entry point into the reference
+  database and the search, not a set of standalone articles.
 - **Reference manager:** filterable table of all references by title,
   organisation, access, and verification status.
 
