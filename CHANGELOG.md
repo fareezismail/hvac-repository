@@ -2,6 +2,36 @@
 
 All notable changes to the HVAC Repository.
 
+## [3.2.0] — 2026-11-11
+
+### Added — 66 more direct Google Drive file links in the notes search
+
+- "Open in Drive" now opens the file itself for 394 of the 1,161 indexed
+  entries (394 of the 471 file entries), up from 328 in v3.1.0. The 66 new
+  links are stored in `DRIVE_LINKS` in `index.html`, all as `webViewLink`
+  values exactly as returned by the Google Drive API:
+  - 55 by normalised (separator-insensitive) filename match with
+    folder-path corroboration — the index recorded the name slightly
+    differently from Drive, differing only in spaces or underscores
+    (e.g. "AEDGSmallHealthcare.pdf" vs "AEDG_SmallHealthcare.pdf").
+  - 5 by extension-insensitive stem match — same file stem, different
+    extension (e.g. "Cooling Tower.xls" vs "Cooling Tower.xlsx"), all in
+    Riverpoint/Schedules, path-corroborated.
+  - 5 weak unique normalised matches with no folder-path corroboration,
+    included at the user's explicit approval.
+  - 1 duplicate entry: index 925 ("MasterList.xlsx") points at the same
+    MasterList.xls file already linked by entry 859, so it adds a resolved
+    entry but no new file.
+  A sample of the new links (including all 5 weak ones and entry 925) was
+  verified by re-fetching them via the Drive API (IDs, names, and links
+  all matched). No Drive URLs are invented.
+- 77 file entries remain unresolved: 60 ambiguous from v3.1 (same file
+  name in more than one folder, index path does not disambiguate), 5 still
+  ambiguous after normalisation, and 12 still not found after all three
+  matching passes — 7 of those 12 look like index artefacts (garbled
+  derived filenames such as "3 .msg") that need an index fix, not a Drive
+  match. Unresolved entries keep the Drive-search fallback.
+
 ## [3.1.0] — 2026-11-11
 
 ### Added — direct Google Drive file links in the notes search
