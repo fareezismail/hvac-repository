@@ -266,7 +266,7 @@
     .tab{flex:1 1 9rem;text-align:left}
   }
 
-  /* ---------- Design Guidance v2.2 ---------- */
+  /* ---------- Design Guidance v3.0 ---------- */
   .dg-intro{max-width:56rem}
   .dg-note{background:#f4f6f3;border:1px solid #d8ddd5;border-left:4px solid #2e7d5f;padding:.7rem .9rem;border-radius:6px;max-width:56rem}
   .dg-block{margin:1.2rem 0;padding:1rem;border:1px solid #d8ddd5;border-radius:8px;background:#fff}
@@ -331,6 +331,21 @@
   .dg-topic-cta{display:block;font-size:.85rem;color:#1d5c46;font-weight:700;margin-top:.35rem}
   .dg-topic-detail{border-width:2px;scroll-margin-top:1rem}
   .dg-note-inline{font-size:.9rem;color:var(--ink-2,#555)}
+  /* v3.0: library, report, checklist */
+  .dg-lib-row{border:1px solid #d8ddd5;border-radius:8px;padding:.55rem .8rem;background:#fff;margin:.5rem 0}
+  .dg-lib-row summary{cursor:pointer;font-size:.95rem}
+  .dg-lib-row summary strong{font-weight:700}
+  .dg-lib-body{margin-top:.5rem}
+  .dg-lib-actions{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end;margin:.5rem 0}
+  .dg-lib-actions label{font-size:.88rem;font-weight:600;display:flex;flex-direction:column;gap:.2rem}
+  .dg-lib-actions input[type=text],.dg-lib-actions input[type=url],.dg-lib-actions select{font:inherit;font-weight:400;padding:.4rem .5rem;border:1px solid #b9c0b5;border-radius:6px;min-width:12rem}
+  .dg-lib-actions input[type=file]{font:inherit;font-size:.88rem}
+  .dg-lib-copy{font-size:.9rem;background:#eef6f1;border-left:4px solid #2e7d5f;padding:.5rem .7rem;border-radius:4px}
+  .dg-lib-status{font-size:.88rem;color:var(--ink-2,#555)}
+  .dg-mini{font-size:.85rem;padding:.25rem .6rem}
+  .dg-done label{color:var(--ink-2,#555);text-decoration:line-through}
+  .dg-report{border-color:#16425b}
+  .dg-report h3{border-bottom:1px solid #d8ddd5;padding-bottom:.3rem}
 
 </style>
 </head>
@@ -406,7 +421,7 @@
   <!-- ============ ONLINE GUIDANCE ============ -->
   <section class="panel guide hidden" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide">
     <h2>Design guidance — space-type-based HVAC codes &amp; standards</h2>
-    <p>Version 2.2 · 11 November 2026. A curated, client-side reference platform: select space types, equipment, and jurisdiction, then search. No backend and no live web search — answers cite the reference database below, with each reference's access and verification status shown.</p>
+    <p>Version 3.0 · 11 November 2026. A curated, client-side reference platform: select space types, equipment, and jurisdiction, then search. No backend and no live web search — answers cite the reference database below, with each reference's access and verification status shown.</p>
     <div id="dg-app"></div>
     <div class="note-box">
       <strong>A note on ASHRAE standards:</strong> ASHRAE standards and guidelines themselves (62.1, 90.1, 90.4, 170, and others) are paywalled and copyrighted. This tool links to the official source and summarises applicability — it does not index or reproduce full standard text.
@@ -415,7 +430,7 @@
 
   <footer class="site">
     <span>Prototype &middot; Nov 11, 2026</span>
-    <span>Design Guidance v2.2 &middot; 11 November 2026</span>
+    <span>Design Guidance v3.0 &middot; 11 November 2026</span>
     <span>Searches the engineering-notes index as it stood on that date.</span>
     <span>The index will be refreshed as the remaining indexing passes are completed.</span>
   </footer>
@@ -856,6 +871,7 @@ var SEARCH_DATA = [{"s":"guides","p":"Design Guides and Codes — Content Index 
 })();
 </script>
 <script src="guidance-data.js"></script>
+<script src="guidance-library.js"></script>
 <script src="guidance-ui.js"></script>
 </body>
 </html>

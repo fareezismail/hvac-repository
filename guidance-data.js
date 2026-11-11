@@ -1,4 +1,4 @@
-/* Design Guidance v2.2 — reference data for the HVAC Repository.
+/* Design Guidance v3.0 — reference data for the HVAC Repository.
    Client-side only. No backend, no API keys.
    Honesty rules for this file:
    - Editions are the latest edition the author could identify; each reference
@@ -587,11 +587,180 @@ var TOPICS = [
  { id:"o-and-m", label:"Operation and maintenance", desc:"Inspection, maintenance, and water management.", refs:["ashrae-180","ashrae-188","ashrae-g12","nfpa-25"] }
 ];
 
+/* ---------- Library categories (v3.0) ----------
+   The 76 references grouped as the engineering standards library.
+   Category 04 also holds the specialist technical references (laboratory
+   ventilation, biosafety, cleanrooms) that belong with equipment standards. */
+var LIB_CATS = [
+ { id:"01", label:"01 — Building and Mechanical Codes", desc:"Model codes, state and municipal adoptions, and building regulations.",
+   refs:["ibc","imc","ifc-code","iecc","ipc","ifgc","iebc","igcc","nec","wac51-11","wac51-52","seattle-mech","seattle-energy","fgi-hosp","fgi-outpatient","osha","epa-refrigerant"] },
+ { id:"02", label:"02 — ASHRAE", desc:"ASHRAE standards, guidelines, handbooks and TC 9.9 resources.",
+   refs:["ashrae-15","ashrae-34","ashrae-55","ashrae-621","ashrae-622","ashrae-901","ashrae-902","ashrae-904","ashrae-111","ashrae-127","ashrae-135","ashrae-170","ashrae-180","ashrae-188","ashrae-202","ashrae-g0","ashrae-g11","ashrae-g36","ashrae-g12","ashrae-g15","ashrae-hb","ashrae-tc99","ashrae-tc99-thermal"] },
+ { id:"03", label:"03 — NFPA and Fire Codes", desc:"NFPA standards and codes with HVAC interfaces.",
+   refs:["nfpa-13","nfpa-25","nfpa-72","nfpa-75","nfpa-76","nfpa-90a","nfpa-91","nfpa-92","nfpa-101","nfpa-110","nfpa-111","nfpa-855"] },
+ { id:"04", label:"04 — Piping and Equipment", desc:"Piping codes, equipment performance standards and specialist technical references.",
+   refs:["asme-b315","asme-b319","asme-bpvc","asme-b16","asme-ix","ahri","ahri-550-590","ahri-551-591","amca","cti","cti-atc-105","cti-std-201","smacna","hi-pump","nebb-aabc","ul","z95","bmbl","iso14644"] },
+ { id:"05", label:"05 — Data Centre Standards", desc:"Data-centre and mission-critical infrastructure standards.",
+   refs:["tia942","iso22237","iso-30134","en50600","uptime"] }
+];
+
+/* ---------- Coverage lists (v3.0) ----------
+   "What this standard covers" — used by the completeness section to name
+   exactly which verification areas an outstanding document blocks. Written
+   only from what the standard is known to cover (its published table of
+   contents / the indexed clause list in this file). partial:true means the
+   list is a summary, not a full contents list — confirm against the
+   published standard. Other references have no coverage list yet; that is
+   follow-up work, not v3.0. */
+var COVERAGE = {
+ "asme-b315": { partial:false, source:"From the published table of contents (ASME B31.5 preview).", areas:[
+   "Refrigerant pipe material selection",
+   "Design pressure and temperature",
+   "Pipe wall thickness",
+   "Joint construction (welded, flanged, brazed, threaded and other joints)",
+   "Pressure testing",
+   "Piping support and installation (expansion, flexibility, supports and restraints)",
+   "Fabrication and assembly, including welding and brazing",
+   "Examination and inspection" ] },
+ "ashrae-15": { partial:true, source:"From the indexed clause list; confirm against the published standard.", areas:[
+   "Refrigerant safety classification",
+   "Charge limits and restrictions on refrigerant use",
+   "Machinery-room requirements",
+   "Leak detection, alarming and emergency ventilation",
+   "Refrigeration piping and system safety",
+   "Design and construction of equipment and systems" ] },
+ "ashrae-34": { partial:true, source:"From the standard's published scope; confirm against the published standard.", areas:[
+   "Refrigerant designations",
+   "Safety-group classification (toxicity and flammability groups)" ] },
+ "imc": { partial:false, source:"From the indexed clause list (Chapters 4, 5, 6, 11 and 12).", areas:[
+   "Ventilation rates and mechanical ventilation (Chapter 4)",
+   "Exhaust systems, including hazardous and kitchen exhaust (Chapter 5)",
+   "Duct systems, dampers and balancing (Chapter 6)",
+   "Refrigeration: classification, machinery rooms, piping materials, joints, installation and testing (Chapter 11)",
+   "Hydronic piping: materials, joints, insulation and testing (Chapter 12)" ] }
+};
+
+/* ---------- Related mechanical systems (v3.0) ----------
+   Curated per-equipment maps feeding Part 2 of the report. Each entry names
+   the related system, the references that govern it, and a short note.
+   Only equipment with a verified map is listed; other equipment falls back
+   to the general related-systems note in the report. */
+var RELATED_SYSTEMS = {
+ crac: [
+  { label:"Refrigeration", refs:["ashrae-15","ashrae-34","imc","asme-b315"], note:"Refrigerant safety, classification and piping — DX configurations only." },
+  { label:"Condensate", refs:["imc","ipc"], note:"Condensate drainage to the adopted plumbing code." },
+  { label:"Air distribution", refs:["imc","ashrae-127"], note:"Airflow management and unit rating (IMC Chapters 4 and 6; ASHRAE 127 for data-centre units)." },
+  { label:"Fire safety", refs:["ibc","ifc-code","nfpa-90a"], note:"Fire and smoke interfaces, dampers and shutdown." },
+  { label:"Electrical", refs:["nec"], note:"Electrical supply and equipment listing." },
+  { label:"Installation", refs:["imc"], note:"Installation, access and maintenance clearances; manufacturer instructions." }
+ ],
+ crah: [
+  { label:"Chilled water", refs:["imc","asme-b319"], note:"Chilled-water piping, isolation and leak detection — the refrigeration circuit is in the chiller plant, not the unit." },
+  { label:"Condensate", refs:["imc","ipc"], note:"Condensate drainage to the adopted plumbing code." },
+  { label:"Air distribution", refs:["imc","ashrae-127"], note:"Airflow management and unit rating (IMC Chapters 4 and 6; ASHRAE 127 for data-centre units)." },
+  { label:"Fire safety", refs:["ibc","ifc-code","nfpa-90a"], note:"Fire and smoke interfaces, dampers and shutdown." },
+  { label:"Electrical", refs:["nec"], note:"Electrical supply and equipment listing." },
+  { label:"Installation", refs:["imc"], note:"Installation, access and maintenance clearances; manufacturer instructions." }
+ ],
+ chiller: [
+  { label:"Refrigeration", refs:["ashrae-15","ashrae-34","asme-b315"], note:"Refrigerant safety and piping." },
+  { label:"Chilled water", refs:["imc","asme-b319"], note:"Chilled-water design (IMC Chapter 12, ASME B31.9)." },
+  { label:"Condenser water and heat rejection", refs:["ashrae-188","ashrae-g12","cti-atc-105","cti-std-201"], note:"Cooling towers, water treatment and Legionella risk management." },
+  { label:"Energy", refs:["ashrae-901","ahri-550-590","ahri-551-591"], note:"Efficiency ratings and energy-code requirements." },
+  { label:"Electrical", refs:["nec"], note:"Electrical supply and controls." },
+  { label:"Installation and commissioning", refs:["imc","ashrae-202","ashrae-111"], note:"Installation, testing, adjusting and balancing, and commissioning." }
+ ],
+ "air-cooled-chiller": [
+  { label:"Refrigeration", refs:["ashrae-15","ashrae-34","asme-b315"], note:"Refrigerant safety and piping." },
+  { label:"Chilled water", refs:["imc","asme-b319"], note:"Chilled-water design (IMC Chapter 12, ASME B31.9)." },
+  { label:"Heat rejection to air", refs:["ashrae-901","imc"], note:"No condenser-water system — heat is rejected to outside air through the unit fans." },
+  { label:"Energy", refs:["ashrae-901","ahri-550-590","ahri-551-591"], note:"Efficiency ratings and energy-code requirements." },
+  { label:"Electrical", refs:["nec"], note:"Electrical supply and controls." },
+  { label:"Installation and commissioning", refs:["imc","ashrae-202","ashrae-111"], note:"Installation, testing, adjusting and balancing, and commissioning." }
+ ],
+ "water-cooled-chiller": [
+  { label:"Refrigeration", refs:["ashrae-15","ashrae-34","asme-b315"], note:"Refrigerant safety and piping." },
+  { label:"Chilled water", refs:["imc","asme-b319"], note:"Chilled-water design (IMC Chapter 12, ASME B31.9)." },
+  { label:"Condenser water and heat rejection", refs:["ashrae-188","ashrae-g12","cti-atc-105","cti-std-201"], note:"Cooling towers, water treatment and Legionella risk management." },
+  { label:"Energy", refs:["ashrae-901","ahri-550-590","ahri-551-591"], note:"Efficiency ratings and energy-code requirements." },
+  { label:"Electrical", refs:["nec"], note:"Electrical supply and controls." },
+  { label:"Installation and commissioning", refs:["imc","ashrae-202","ashrae-111"], note:"Installation, testing, adjusting and balancing, and commissioning." }
+ ],
+ "cooling-tower": [
+  { label:"Heat rejection", refs:["cti-atc-105","cti-std-201"], note:"Thermal performance and acceptance testing." },
+  { label:"Water treatment", refs:["ashrae-188","ashrae-g12"], note:"Water management and Legionella risk." },
+  { label:"Structure", refs:["ibc"], note:"Structural loading and support." },
+  { label:"Energy", refs:["ashrae-901"], note:"Energy-code provisions." },
+  { label:"Installation", refs:["imc"], note:"Installation, freeze protection and access." }
+ ],
+ ahu: [
+  { label:"Air distribution", refs:["imc","smacna"], note:"Duct systems (IMC Chapter 6) and duct construction." },
+  { label:"Filtration and indoor air quality", refs:["ashrae-621","ashrae-170"], note:"Ventilation rates and filtration." },
+  { label:"Fire safety", refs:["nfpa-90a","ibc","ifc-code"], note:"Duct penetrations, fire and smoke dampers." },
+  { label:"Electrical", refs:["nec"], note:"Electrical supply, fans and controls." },
+  { label:"Controls", refs:["ashrae-135","ashrae-g36"], note:"BACnet and control sequences." },
+  { label:"Commissioning", refs:["ashrae-111","ashrae-202"], note:"Testing, adjusting, balancing and commissioning." }
+ ]
+};
+
+/* ---------- Configuration clarifier (v3.0) ----------
+   Equipment where the configuration changes the answer. The tool asks which
+   configuration applies BEFORE showing results. "both" compares the two
+   configurations side by side. boost lists references to favour in scoring
+   for the chosen configuration. */
+var CONFIGS = {
+ crac: { question:"Which CRAC configuration are you asking about?",
+  options:[
+   { id:"dx", label:"DX CRAC", desc:"Refrigerant circuit in the unit — refrigerant piping applies.", boost:["asme-b315","ashrae-15","ashrae-34","imc"], note:"DX CRAC: the refrigeration circuit is in the unit. Refrigerant piping (ASME B31.5, ASHRAE 15/34, IMC Chapter 11) applies." },
+   { id:"chw", label:"Chilled-water CRAC / CRAH", desc:"Refrigeration circuit in the chiller plant — chilled-water piping applies.", boost:["asme-b319","imc"], note:"Chilled-water CRAC/CRAH: the refrigeration circuit is in the chiller plant. Facility chilled-water piping (ASME B31.9, IMC Chapter 12) applies; refrigerant piping does not apply to the unit." },
+   { id:"both", label:"Show both", desc:"Compare the DX and chilled-water configurations side by side.", boost:[], note:"Showing both configurations: DX and chilled-water requirements are shown separately — do not merge them." } ] },
+ crah: { question:"Which CRAC/CRAH configuration are you asking about?",
+  options:[
+   { id:"dx", label:"DX CRAC", desc:"Refrigerant circuit in the unit — refrigerant piping applies.", boost:["asme-b315","ashrae-15","ashrae-34","imc"], note:"DX CRAC: the refrigeration circuit is in the unit. Refrigerant piping (ASME B31.5, ASHRAE 15/34, IMC Chapter 11) applies." },
+   { id:"chw", label:"Chilled-water CRAC / CRAH", desc:"Refrigeration circuit in the chiller plant — chilled-water piping applies.", boost:["asme-b319","imc"], note:"Chilled-water CRAC/CRAH: the refrigeration circuit is in the chiller plant. Facility chilled-water piping (ASME B31.9, IMC Chapter 12) applies; refrigerant piping does not apply to the unit." },
+   { id:"both", label:"Show both", desc:"Compare the DX and chilled-water configurations side by side.", boost:[], note:"Showing both configurations: DX and chilled-water requirements are shown separately — do not merge them." } ] },
+ chiller: { question:"Air-cooled or water-cooled chiller?",
+  options:[
+   { id:"air", label:"Air-cooled", desc:"Heat rejected to outside air — no condenser-water system.", boost:["ashrae-901","imc"], note:"Air-cooled chiller: heat is rejected to outside air. No condenser-water system, cooling tower or water treatment." },
+   { id:"water", label:"Water-cooled", desc:"Condenser-water loop with a cooling tower or dry cooler.", boost:["ashrae-188","ashrae-g12","cti-atc-105","asme-b319"], note:"Water-cooled chiller: condenser-water loop, cooling tower or dry cooler, and water treatment apply (ASHRAE 188, CTI)." },
+   { id:"both", label:"Show both", desc:"Compare air- and water-cooled configurations side by side.", boost:[], note:"Showing both configurations: air- and water-cooled requirements are shown separately." } ] }
+};
+/* Equipment whose configuration is fixed by the equipment itself. */
+var CONFIG_PRESETS = {
+ "air-cooled-chiller": { configId:"air", label:"Air-cooled", note:"Air-cooled chiller: heat is rejected to outside air. No condenser-water system, cooling tower or water treatment." },
+ "water-cooled-chiller": { configId:"water", label:"Water-cooled", note:"Water-cooled chiller: condenser-water loop, cooling tower or dry cooler, and water treatment apply (ASHRAE 188, CTI)." }
+};
+
+/* ---------- Required calculations, drawings or schedules (v3.0) ----------
+   Typical deliverables for the equipment — generic engineering practice,
+   not code-mandated items. Labelled as typical in the report. */
+var DELIVERABLES = {
+ crac: ["Sensible cooling capacity calculation and unit schedule","Airflow and redundancy schedule (N / N+1 / 2N)","Refrigerant or chilled-water piping layout and sections (per configuration)","Leak detection and alarming schedule","Commissioning and failure-mode test plan"],
+ crah: ["Sensible cooling capacity calculation and unit schedule","Airflow and redundancy schedule (N / N+1 / 2N)","Chilled-water piping layout and sections","Leak detection and alarming schedule","Commissioning and failure-mode test plan"],
+ chiller: ["Cooling load calculation","Chiller schedule (capacity, efficiency, temperatures, flows)","Chilled-water and condenser-water flow and pressure-drop calculations","Pump schedule and piping layout","Refrigerant safety schedule (type, charge, ASHRAE 15 provisions)","Commissioning and performance test plan"],
+ "air-cooled-chiller": ["Cooling load calculation","Chiller schedule (capacity, efficiency, temperatures, flows)","Chilled-water flow and pressure-drop calculations","Pump schedule and piping layout","Refrigerant safety schedule (type, charge, ASHRAE 15 provisions)","Commissioning and performance test plan"],
+ "water-cooled-chiller": ["Cooling load calculation","Chiller schedule (capacity, efficiency, temperatures, flows)","Chilled-water and condenser-water flow and pressure-drop calculations","Pump schedule and piping layout","Cooling tower schedule","Refrigerant safety schedule (type, charge, ASHRAE 15 provisions)","Commissioning and performance test plan"],
+ "cooling-tower": ["Heat rejection calculation (approach, range, wet-bulb)","Cooling tower schedule","Water treatment and Legionella management plan","Structural loading schedule","Noise and plume assessment"],
+ ahu: ["Airflow and coil duty calculations","AHU schedule (airflow, static pressure, filtration)","Duct layout and damper schedule","Control sequence","Testing, adjusting and balancing report"],
+ "refrigerant-piping": ["Pipe sizing calculation (pressure drop, oil return)","Piping layout, sections and support schedule","Pressure test record","Leak detection schedule"],
+ boiler: ["Heating load calculation","Boiler schedule","Flue and combustion-air layout","Gas piping layout"],
+ ductwork: ["Duct sizing calculations","Duct layout and sections","Damper schedule"],
+ bms: ["Points list","Control sequences","Graphics and alarming schedule","Integration test plan"],
+ "fume-hood": ["Fume-hood schedule (type, face velocity, exhaust rate)","Exhaust duct layout","Make-up air calculation"],
+ "lab-exhaust": ["Exhaust rate schedule","Duct layout and discharge assessment","Fan schedule and failure-alarm provisions"],
+ "smoke-control": ["Smoke-control design analysis","Pressurisation / exhaust schedule","Testing and documentation package"],
+ "chw-pump": ["Pump duty calculation (flow, head, NPSH)","Pump schedule","Pumping arrangement diagram"]
+};
+var DELIVERABLES_GENERIC = ["Equipment schedule","Design calculations for capacity and flows","Installation drawings and sections","Control sequence (where applicable)","Commissioning documentation"];
+
 return {
  SPACE_GROUPS: SPACE_GROUPS, SPACE_LABEL: SPACE_LABEL,
  EQUIPMENT_GROUPS: EQUIPMENT_GROUPS, EQUIP_LABEL: EQUIP_LABEL, EQUIP_ALIASES: EQUIP_ALIASES,
  JURISDICTIONS: JURISDICTIONS, REFERENCES: REFERENCES,
  SPACE_PROFILES: SPACE_PROFILES, GROUP_FALLBACK: GROUP_FALLBACK,
- EQUIP_PROFILES: EQUIP_PROFILES, TOPICS: TOPICS
+ EQUIP_PROFILES: EQUIP_PROFILES, TOPICS: TOPICS,
+ LIB_CATS: LIB_CATS, COVERAGE: COVERAGE, RELATED_SYSTEMS: RELATED_SYSTEMS,
+ CONFIGS: CONFIGS, CONFIG_PRESETS: CONFIG_PRESETS,
+ DELIVERABLES: DELIVERABLES, DELIVERABLES_GENERIC: DELIVERABLES_GENERIC
 };
 })();

@@ -2,6 +2,129 @@
 
 All notable changes to the HVAC Repository.
 
+## [3.0.0] — 2026-11-11
+
+Restructure around the workflow: library → space types / equipment /
+jurisdiction → search → 10-part report → project checklist. All data from
+v2.2 is preserved (76 references, 192 clause entries, 79 space types,
+72 equipment items, 25 topics, notes search untouched).
+
+### Added — browser-local document library (`guidance-library.js`)
+
+- The 76 references become the library catalogue in five categories:
+  01 Building and Mechanical Codes (17), 02 ASHRAE (23), 03 NFPA and Fire
+  Codes (12), 04 Piping and Equipment (19), 05 Data Centre Standards (5).
+- Each entry shows metadata (title, publisher, edition/publication date,
+  jurisdiction, revision/amendment history, access status, source URL,
+  upload date, checksum/version) and one of five statuses: Available /
+  Partial / Upload required / Link required / Unverified.
+- Each entry has an upload control and a direct-URL field. Uploading an
+  authorised copy flips the reference to Available (your copy) and re-runs
+  the current query with it included. Adding a newer edition flags the older
+  one as Superseded instead of replacing it.
+- Storage: IndexedDB for uploaded documents, with localStorage and
+  in-memory fallbacks (every IndexedDB call guarded) so the app never
+  crashes where storage is unavailable; jsdom QA exercises the localStorage
+  path. Nothing ever leaves the browser.
+- Library Export (download a backup file) and Import (restore it) — local
+  files only. Export contains extracted text and metadata, not original file
+  bytes.
+- The reference-manager table folds into the library; there is no separate
+  duplicate manager.
+
+### Added — in-browser upload extraction
+
+- Formats: PDF, DOCX, XLSX, TXT. Full text, keyword-searchable; search
+  results surface matches from uploaded documents in Part 5 with a location
+  reference. Reader libraries (pdf.js 3.11.174, Mammoth 1.8.0, SheetJS
+  xlsx 0.18.5, same as the Data Center tool) are loaded from cdnjs on demand
+  — all three verified HTTP 200 on 11 November 2026.
+- Location references, honestly by format: PDF = page numbers; DOCX =
+  section headings in document order (Mammoth cannot paginate — no page
+  numbers are invented for DOCX); XLSX = sheet and cell; TXT = line numbers.
+- No structured clause extraction. Uploaded documents are never transmitted
+  to any external service.
+
+### Changed — results are now exactly the numbered 10-part report
+
+- (1) Search term and equipment configuration. (2) Related mechanical
+  systems. (3) Applicable codes and standards. (4) Exact clauses and
+  subsections. (5) Relevant code language or concise paraphrase.
+  (6) Engineering interpretation. (7) Specific design checks.
+  (8) Required calculations, drawings or schedules. (9) Exceptions and
+  applicability conditions. (10) Official source links and verification
+  status. Existing content (interpretation, per-space sections, conflict
+  warnings, checklist items, coordination, missing information) is mapped
+  into the parts, not dropped. The completeness banner sits above Part 1;
+  the outstanding-documents section follows Part 10.
+- Fixed the v2.2 nuance: a section-number search ("IMC 1107") now shows the
+  matched reference's card with its clause table inside the report, not just
+  the Clause match box with zero reference cards.
+
+### Added — intelligent search
+
+- Curated related-systems maps per equipment feed Part 2: CRAC and CRAH
+  (Refrigeration, Condensate, Air distribution, Fire safety, Electrical,
+  Installation), plus chillers (air- and water-cooled), cooling towers, and
+  AHUs.
+- Configuration clarifier: when a query matches equipment where the
+  configuration changes the answer, the tool asks before showing results —
+  DX vs chilled-water CRAC/CRAH, air- vs water-cooled chiller — with a
+  "Show both" escape. The chosen configuration is recorded in Part 1 and
+  remembered per equipment for the session.
+
+### Added — coverage lists ("what this standard covers")
+
+- Curated for the refrigeration/piping set first: ASME B31.5, ASHRAE 15,
+  ASHRAE 34, IMC Chapter 11. ASHRAE 15 and 34 are marked partial (the lists
+  are known to be incomplete); nothing is claimed that the standard is not
+  known to cover. When one of these references is outstanding, the report
+  lists exactly which verification areas it blocks. Coverage lists for other
+  references are follow-up work, not v3.0.
+
+### Added — persistent project checklist
+
+- Each report's design checks get an "add to project checklist" affordance
+  (plus "Add all checks to project checklist"). The checklist accumulates
+  across searches, is stored locally in the same browser as the library,
+  and lets the user tick items off, remove them, and clear completed ones.
+  Export downloads the checklist as JSON; print uses the browser. The tool
+  never marks anything compliant on its own — ticks are the user's only.
+
+### Changed — layout
+
+- Tab order is now Library → Project context (spaces / equipment /
+  jurisdiction) → Search → Report → Project checklist; the topic library
+  stays below the report. Notes search tab and Google Sites embed unchanged.
+
+### QA
+
+- Local jsdom QA: **68/68 passed** (10-part report headings in order,
+  completeness banner + outstanding-documents section, clarifier for CRAC
+  and chiller queries including "show both", section search "IMC 1107" now
+  showing the IMC card with its 54-section clause table, coverage lists
+  for B31.5/15/34/IMC-11 surfaced in the completeness section, library
+  with 5 categories / 76 rows / upload controls / statuses, checklist
+  add/tick/persist across simulated searches via localStorage, related-
+  systems Part 2 for a CRAC search, version strings 3.0.0 in tab + footer,
+  and the adapted v2.2 checks: clause rendering, topic search button,
+  notes search "chiller" still 81 results, conflict flagging, clear-all →
+  equipment-only mode, outstanding docs on "chiller").
+- Real file upload cannot run in jsdom: the upload path was verified by
+  code inspection plus a synthetic test with an in-memory TXT file
+  (extraction with line locations, status flip to Available, keyword search
+  over the uploaded text, re-run surfacing the match in Part 5, and the
+  reference dropping out of the outstanding list). PDF/DOCX/XLSX extraction
+  paths were verified by code inspection only; they share the same
+  extraction pipeline and the same cdnjs libraries as the Data Center tool.
+
+### Deliberately left out (follow-up, not v3.0)
+
+- Coverage lists beyond the refrigeration/piping set; related-systems maps
+  beyond CRAC/CRAH/chillers/cooling towers/AHUs; structured clause
+  extraction from uploads; automatic publisher checks for new editions;
+  any sharing of the library.
+
 ## [2.2.0] — 2026-11-11
 
 ### Fixed — version strings
