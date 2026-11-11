@@ -2,6 +2,17 @@
 
 All notable changes to the HVAC Repository.
 
+## [3.2.4] — 2026-11-11
+
+### Changed — sections renumbered in display order (revision 5)
+
+- Sections now read 1 · Project context, 2 · Search,
+  3 · Engineering standards library, 4 · Project checklist, in display
+  order. The report area between Search and the library stays
+  unnumbered, and the report's own 1–10 part numbering is unchanged.
+  The "Section 5" cross-reference in the report ("Checks accumulate in
+  the project checklist (Section 5)") now reads "(Section 4)".
+
 ## [3.2.3] — 2026-11-11
 
 ### Changed — section order, corrected (revision 4, clarified)

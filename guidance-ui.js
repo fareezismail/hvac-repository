@@ -83,8 +83,8 @@ function build() {
   html += '<p class="dg-note"><strong>Scope and honesty:</strong> this is a curated reference database, not a live search of full standard text. Most ASHRAE, NFPA, ASME and ICC documents are <strong>paywalled</strong> — this tool links to the official source and summarises applicability; it does not reproduce standard text. Editions were checked against publisher sources on 11 November 2026; each reference shows its verification status. A model code is <strong>not</strong> enforceable until adopted by the authority having jurisdiction (AHJ) for the project.</p>';
 
 
-  /* 2 · Project context: jurisdiction, spaces, equipment */
-  html += '<section class="dg-block" aria-label="Project context"><h3>2 · Project context — jurisdiction, space types, equipment</h3>';
+  /* 1 · Project context: jurisdiction, spaces, equipment */
+  html += '<section class="dg-block" aria-label="Project context"><h3>1 · Project context — jurisdiction, space types, equipment</h3>';
   html += '<div class="dg-row"><label>Country / state / city <select id="dg-jurisdiction">' + D.JURISDICTIONS.map(function (j) { return '<option value="' + esc(j.id) + '"' + (j.id === state.jurisdiction ? " selected" : "") + '>' + esc(j.label) + '</option>'; }).join("") + '</select></label>';
   html += '<label>Authority having jurisdiction (AHJ) <input id="dg-ahj" type="text" placeholder="e.g. Seattle Department of Construction &amp; Inspections" /></label>';
   html += '<label>Adopted code editions (if known) <input id="dg-editions" type="text" placeholder="e.g. 2021 WSEC, 2021 Seattle Mechanical Code" /></label></div>';
@@ -109,8 +109,8 @@ function build() {
   });
   html += '</select></label></div></section>';
 
-  /* 3 · Search */
-  html += '<section class="dg-block" aria-label="Search"><h3>3 · Search</h3><div class="dg-row">';
+  /* 2 · Search */
+  html += '<section class="dg-block" aria-label="Search"><h3>2 · Search</h3><div class="dg-row">';
   html += '<label class="dg-q">Question or search <input id="dg-query" type="search" placeholder="e.g. What are the ventilation requirements for an operating theatre?" /></label>';
   html += '<button type="button" class="dg-btn dg-go" id="dg-search">Search guidance</button>';
   html += '</div><div class="dg-suggest" id="dg-suggest"></div></section>';
@@ -118,15 +118,15 @@ function build() {
   html += '<div id="dg-clarify" aria-live="polite"></div>';
   html += '<div id="dg-results" aria-live="polite"></div>';
 
-  /* 1 · Library */
-  html += '<section class="dg-block" aria-label="Engineering standards library"><h3>1 · Engineering standards library</h3>';
+  /* 3 · Library */
+  html += '<section class="dg-block" aria-label="Engineering standards library"><h3>3 · Engineering standards library</h3>';
   html += '<p class="dg-note">Your documents live in this browser only (IndexedDB where available). Upload an authorised copy to make a reference Available for review — the search re-runs with it included. Back up the library with Export; restore it with Import. <span id="dg-lib-storage"></span></p>';
   html += '<div class="dg-row"><button type="button" class="dg-btn" id="dg-lib-export">Export library backup</button><button type="button" class="dg-btn" id="dg-lib-import-btn">Import backup</button><input type="file" id="dg-lib-import-file" accept=".json,application/json" hidden /><span class="dg-count" id="dg-lib-count"></span></div>';
   html += '<div class="dg-row"><label class="dg-filter">Filter library <input id="dg-lib-filter" type="search" placeholder="Filter by title, organisation, or number…" /></label><label>Category <select id="dg-lib-cat"><option value="">All categories</option>' + D.LIB_CATS.map(function (c) { return '<option value="' + esc(c.id) + '">' + esc(c.label) + '</option>'; }).join("") + '</select></label><label>Status <select id="dg-lib-status"><option value="">All statuses</option><option>Available</option><option>Partial</option><option>Upload required</option><option>Link required</option><option>Unverified</option><option>Superseded</option></select></label></div>';
   html += '<div id="dg-lib-export-area"></div><div id="dg-library"></div></section>';
 
-  /* 5 · Project checklist (persistent, local only) */
-  html += '<section class="dg-block" aria-label="Project checklist"><h3>5 · Project checklist</h3>';
+  /* 4 · Project checklist (persistent, local only) */
+  html += '<section class="dg-block" aria-label="Project checklist"><h3>4 · Project checklist</h3>';
   html += '<p class="dg-note">Checks you add from reports accumulate here and are stored only in this browser, alongside the library. Tick an item off when <strong>you</strong> have verified it — this tool never marks anything compliant on its own. <span id="dg-checklist-count"></span></p>';
   html += '<div class="dg-row"><button type="button" class="dg-btn" id="dg-checklist-export">Export checklist (JSON)</button><button type="button" class="dg-btn" id="dg-checklist-print">Print</button><button type="button" class="dg-btn" id="dg-checklist-clear">Clear completed</button></div>';
   html += '<div id="dg-checklist-export-area"></div><ul id="dg-checklist" class="dg-checklist"></ul></section>';
@@ -685,7 +685,7 @@ function runSearch() {
   checklist = uniq(checklist);
   html += '<h3>7 · Specific design checks</h3>';
   if (checklist.length) {
-    html += '<p><button type="button" class="dg-btn" data-add-all-checks="1" data-add-source="' + esc(sourceLabel) + '">Add all checks to project checklist</button> <span class="dg-note-inline">Checks accumulate in the project checklist (Section 5) — tick them off yourself when verified.</span></p>';
+    html += '<p><button type="button" class="dg-btn" data-add-all-checks="1" data-add-source="' + esc(sourceLabel) + '">Add all checks to project checklist</button> <span class="dg-note-inline">Checks accumulate in the project checklist (Section 4) — tick them off yourself when verified.</span></p>';
     html += '<ul class="dg-checklist">' + checklist.map(function (c) {
       return '<li>' + esc(c) + ' <button type="button" class="dg-btn dg-mini" data-add-check="' + esc(c) + '" data-add-source="' + esc(sourceLabel) + '">Add to project checklist</button></li>';
     }).join("") + '</ul>';

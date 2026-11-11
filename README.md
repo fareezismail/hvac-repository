@@ -9,7 +9,7 @@ otherwise runs a Drive search for the file name.
 
 Live site: https://fareezismail.github.io/hvac-repository/
 
-## Design Guidance (v3.2.3)
+## Design Guidance (v3.2.4)
 
 The **Design guidance** tab is a space-type-based HVAC design codes and
 guidance platform. It is fully client-side: there is no backend, no API key,
