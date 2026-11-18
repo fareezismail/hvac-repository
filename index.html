@@ -455,7 +455,7 @@ var SEARCH_DATA = [{"s":"guides","p":"Design Guides and Codes — Content Index 
 
   // Pre-compute lowercase haystacks once.
   var INDEX = SEARCH_DATA.map(function(e, i){
-    return { i:i, s:e.s, p:e.p, t:e.t, type:fileTypeForEntry(e), hay:(e.p + " \n " + e.t).toLowerCase(), tLow:e.t.toLowerCase(), pLow:e.p.toLowerCase() };
+    return { i:i, s:e.s, p:e.p, t:e.t, u:e.u, f:e.f, type:fileTypeForEntry(e), hay:(e.p + " \n " + e.t).toLowerCase(), tLow:e.t.toLowerCase(), pLow:e.p.toLowerCase() };
   });
 
   var typeCounts = { all: SEARCH_DATA.length };
